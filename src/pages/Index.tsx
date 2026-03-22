@@ -202,7 +202,7 @@ function HomeTab({ setTab }: { setTab:(t:any)=>void }) {
         <div className="absolute inset-0 bg-gradient-to-r from-violet-900/90 via-violet-800/60 to-transparent" />
         <div className="absolute inset-0 p-5 flex flex-col justify-end">
           <span className="text-xs font-bold text-cyan-400 bg-cyan-400/20 rounded-full px-3 py-1 w-fit mb-2">🚀 Доставка от 2 часов</span>
-          <h2 className="text-white font-black text-xl leading-tight">Профессиональная<br/>химчистка на дом</h2>
+          <h2 className="text-white font-black text-xl leading-tight">Профессиональная<br/>химчистка</h2>
           <button onClick={()=>setTab("catalog")} className="mt-3 bg-brand-gradient text-white font-bold text-sm rounded-2xl px-5 py-2.5 w-fit shadow-lg shadow-violet-500/40 active:scale-95 transition-transform">
             Выбрать услугу →
           </button>
