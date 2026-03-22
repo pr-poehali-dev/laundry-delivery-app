@@ -232,7 +232,6 @@ function HomeTab({ setTab }: { setTab:(t:any)=>void }) {
           <div key={s.title} className={`service-card glass rounded-2xl p-4 cursor-pointer animate-fade-in ${s.d}`} onClick={()=>setTab("catalog")}>
             <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${s.gradient} flex items-center justify-center text-2xl mb-3 shadow-lg`}>{s.emoji}</div>
             <div className="font-bold text-white text-sm leading-tight">{s.title}</div>
-            <div className="text-muted-foreground text-xs mt-1">{s.from}</div>
           </div>
         ))}
       </div>
