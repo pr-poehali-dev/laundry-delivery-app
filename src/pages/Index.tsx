@@ -600,7 +600,7 @@ function ProfileTab({profileTab,setProfileTab,chatOpen,setChatOpen,chatHistory,c
 
       {profileTab==="info" && (
         <div className="space-y-3 animate-fade-in">
-          {[["📱","Телефон","89069844540"],["🏠","Адрес","ул. Усова 13А"],["🎂","Бонусы","320 баллов"],["📅","С нами с","Апрель 2026"]].map(([icon,label,val])=>(
+          {[["📱","Телефон","+7(906)984 4540"],["🏠","Адрес","ул. Усова 13А"],["🎂","Бонусы","320 баллов"],["📅","С нами с","Апрель 2026"]].map(([icon,label,val])=>(
             <div key={String(label)} className="glass rounded-2xl p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-xl">{icon}</span>
