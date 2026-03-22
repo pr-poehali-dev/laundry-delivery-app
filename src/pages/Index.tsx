@@ -249,7 +249,7 @@ function HomeTab({ setTab }: { setTab:(t:any)=>void }) {
       <div className="glass rounded-2xl p-4 animate-fade-in stagger-5">
         <h3 className="font-bold text-white text-sm mb-3">🚗 Условия доставки</h3>
         <div className="space-y-2">
-          {[["Забор вещей","300–500 ₽"],["Возврат вещей","300–500 ₽"],["Бесплатно от заказа","3 000 ₽"]].map(([k,v])=>(
+          {[["Доставка","300–500 ₽"],["Бесплатно от заказа","3 000 ₽"]].map(([k,v])=>(
             <div key={k} className="flex justify-between"><span className="text-muted-foreground text-xs">{k}</span><span className="text-white text-xs font-bold">{v}</span></div>
           ))}
         </div>
