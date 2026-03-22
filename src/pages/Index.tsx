@@ -189,7 +189,6 @@ function HomeTab({ setTab }: { setTab:(t:any)=>void }) {
     <div className="px-4 pt-6 pb-4">
       <div className="flex items-center justify-between mb-6 animate-fade-in">
         <div>
-          <p className="text-muted-foreground text-sm font-semibold">Добрый день 👋</p>
           <h1 className="text-2xl font-black gradient-text">Мобильная прачечная</h1>
         </div>
         <div className="w-11 h-11 rounded-2xl glass flex items-center justify-center">
