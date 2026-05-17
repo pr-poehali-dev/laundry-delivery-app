@@ -58,6 +58,55 @@ const SERVICES = [
   },
 ];
 
+/* serviceId: 1=верхняя одежда, 2=ковры, 3=костюмы, 4=спецодежда */
+const LAUNDRIES = [
+  {
+    id: 1, name: "Чисто Тайм", emoji: "🌊",
+    prices: {
+      1: { "Пальто":1900,"Куртка":1500,"Пуховик":2300,"Шуба":4800,"Плащ":1700 },
+      2: { "Ковёр до 4 м²":950,"Ковёр 4–8 м²":1700,"Ковёр 8–15 м²":2900,"Ковёр >15 м²":3900,"Ковровая дорожка":750 },
+      3: { "Пиджак":1000,"Брюки":700,"Костюм (2 пред.)":1600,"Жилет":600,"Смокинг":2300 },
+      4: { "Комбинезон":1150,"Спецкуртка":950,"Спецбрюки":750,"Халат":550,"Медицинский костюм":700 },
+    },
+  },
+  {
+    id: 2, name: "Bowe", emoji: "🔵",
+    prices: {
+      1: { "Пальто":2100,"Куртка":1700,"Пуховик":2500,"Шуба":5200,"Плащ":1900 },
+      2: { "Ковёр до 4 м²":1050,"Ковёр 4–8 м²":1900,"Ковёр 8–15 м²":3200,"Ковёр >15 м²":4300,"Ковровая дорожка":850 },
+      3: { "Пиджак":1150,"Брюки":800,"Костюм (2 пред.)":1850,"Жилет":700,"Смокинг":2600 },
+      4: { "Комбинезон":1300,"Спецкуртка":1050,"Спецбрюки":850,"Халат":650,"Медицинский костюм":800 },
+    },
+  },
+  {
+    id: 3, name: "Тинтория", emoji: "✨",
+    prices: {
+      1: { "Пальто":1750,"Куртка":1350,"Пуховик":2100,"Шуба":4400,"Плащ":1550 },
+      2: { "Ковёр до 4 м²":880,"Ковёр 4–8 м²":1550,"Ковёр 8–15 м²":2700,"Ковёр >15 м²":3600,"Ковровая дорожка":680 },
+      3: { "Пиджак":920,"Брюки":620,"Костюм (2 пред.)":1450,"Жилет":520,"Смокинг":2100 },
+      4: { "Комбинезон":1050,"Спецкуртка":880,"Спецбрюки":680,"Халат":480,"Медицинский костюм":630 },
+    },
+  },
+  {
+    id: 4, name: "Тапки Хаус", emoji: "🧹",
+    prices: {
+      1: { "Пальто":1600,"Куртка":1250,"Пуховик":1950,"Шуба":4100,"Плащ":1450 },
+      2: { "Ковёр до 4 м²":820,"Ковёр 4–8 м²":1450,"Ковёр 8–15 м²":2550,"Ковёр >15 м²":3400,"Ковровая дорожка":620 },
+      3: { "Пиджак":850,"Брюки":580,"Костюм (2 пред.)":1350,"Жилет":480,"Смокинг":1950 },
+      4: { "Комбинезон":980,"Спецкуртка":820,"Спецбрюки":620,"Халат":440,"Медицинский костюм":580 },
+    },
+  },
+  {
+    id: 5, name: "Бот Ас", emoji: "🤖",
+    prices: {
+      1: { "Пальто":2000,"Куртка":1600,"Пуховик":2400,"Шуба":5000,"Плащ":1800 },
+      2: { "Ковёр до 4 м²":1000,"Ковёр 4–8 м²":1800,"Ковёр 8–15 м²":3100,"Ковёр >15 м²":4100,"Ковровая дорожка":800 },
+      3: { "Пиджак":1100,"Брюки":750,"Костюм (2 пред.)":1750,"Жилет":650,"Смокинг":2500 },
+      4: { "Комбинезон":1200,"Спецкуртка":1000,"Спецбрюки":800,"Халат":600,"Медицинский костюм":750 },
+    },
+  },
+];
+
 const TIME_SLOTS = ["9:00–12:00", "12:00–15:00", "15:00–18:00", "18:00–21:00"];
 
 const ORDER_STATUSES = [
@@ -84,7 +133,7 @@ function getFirstDayOfMonth(year: number, month: number) {
 /* ──────────── MAIN ──────────── */
 export default function App() {
   const [tab, setTab] = useState<"home"|"catalog"|"cart"|"track"|"profile">("home");
-  const [cart, setCart] = useState<{serviceId:number;itemName:string;price:number;qty:number}[]>([]);
+  const [cart, setCart] = useState<{serviceId:number;itemName:string;price:number;qty:number;laundry?:string}[]>([]);
   const [expandedService, setExpandedService] = useState<number|null>(null);
   const [addedAnim, setAddedAnim] = useState<string|null>(null);
   const [checkoutStep, setCheckoutStep] = useState<"cart"|"delivery"|"confirm">("cart");
@@ -106,27 +155,27 @@ export default function App() {
   const totalItems = cart.reduce((s,i) => s+i.qty, 0);
   const totalPrice = cart.reduce((s,i) => s+i.price*i.qty, 0);
 
-  const addToCart = (serviceId:number, itemName:string, price:number) => {
+  const addToCart = (serviceId:number, itemName:string, price:number, laundry?:string) => {
     setCart(prev => {
-      const ex = prev.find(i => i.serviceId===serviceId && i.itemName===itemName);
-      if (ex) return prev.map(i => i.serviceId===serviceId && i.itemName===itemName ? {...i,qty:i.qty+1} : i);
-      return [...prev,{serviceId,itemName,price,qty:1}];
+      const ex = prev.find(i => i.serviceId===serviceId && i.itemName===itemName && i.laundry===laundry);
+      if (ex) return prev.map(i => i.serviceId===serviceId && i.itemName===itemName && i.laundry===laundry ? {...i,qty:i.qty+1} : i);
+      return [...prev,{serviceId,itemName,price,qty:1,laundry}];
     });
     setAddedAnim(itemName);
     setTimeout(()=>setAddedAnim(null),900);
   };
 
-  const removeFromCart = (serviceId:number, itemName:string) => {
+  const removeFromCart = (serviceId:number, itemName:string, laundry?:string) => {
     setCart(prev => {
-      const ex = prev.find(i => i.serviceId===serviceId && i.itemName===itemName);
+      const ex = prev.find(i => i.serviceId===serviceId && i.itemName===itemName && i.laundry===laundry);
       if (!ex) return prev;
-      if (ex.qty===1) return prev.filter(i => !(i.serviceId===serviceId && i.itemName===itemName));
-      return prev.map(i => i.serviceId===serviceId && i.itemName===itemName ? {...i,qty:i.qty-1} : i);
+      if (ex.qty===1) return prev.filter(i => !(i.serviceId===serviceId && i.itemName===itemName && i.laundry===laundry));
+      return prev.map(i => i.serviceId===serviceId && i.itemName===itemName && i.laundry===laundry ? {...i,qty:i.qty-1} : i);
     });
   };
 
   const getQty = (serviceId:number, itemName:string) =>
-    cart.find(i => i.serviceId===serviceId && i.itemName===itemName)?.qty ?? 0;
+    cart.filter(i => i.serviceId===serviceId && i.itemName===itemName).reduce((s,i)=>s+i.qty,0);
 
   const sendChat = () => {
     if (!chatMsg.trim()) return;
@@ -259,6 +308,19 @@ function HomeTab({ setTab }: { setTab:(t:any)=>void }) {
 
 /* ──────────── CATALOG ──────────── */
 function CatalogTab({services,expandedService,setExpandedService,addToCart,removeFromCart,getQty,addedAnim}:any) {
+  const [laundryModal, setLaundryModal] = useState<{svcId:number;itemName:string;gradient:string}|null>(null);
+
+  const handleAddClick = (svcId:number, itemName:string, gradient:string) => {
+    setLaundryModal({svcId, itemName, gradient});
+  };
+
+  const handleSelectLaundry = (laundry:any) => {
+    if (!laundryModal) return;
+    const price = (laundry.prices as any)[laundryModal.svcId]?.[laundryModal.itemName] ?? 0;
+    addToCart(laundryModal.svcId, laundryModal.itemName, price, laundry.name);
+    setLaundryModal(null);
+  };
+
   return (
     <div className="px-4 pt-6">
       <div className="mb-6 animate-fade-in">
@@ -289,17 +351,17 @@ function CatalogTab({services,expandedService,setExpandedService,addToCart,remov
                     <div key={item.name} className="glass rounded-2xl px-4 py-3 flex items-center justify-between">
                       <div>
                         <div className="text-white text-sm font-semibold">{item.name}</div>
-                        <div className={`font-black text-sm bg-gradient-to-r ${svc.gradient} bg-clip-text text-transparent`}>{item.price.toLocaleString()} ₽</div>
+                        <div className="text-muted-foreground text-xs mt-0.5">от {Math.min(...LAUNDRIES.map(l=>(l.prices as any)[svc.id]?.[item.name]??9999)).toLocaleString()} ₽</div>
                       </div>
                       {qty===0 ? (
-                        <button onClick={()=>addToCart(svc.id,item.name,item.price)} className={`bg-gradient-to-r ${svc.gradient} text-white text-xs font-bold rounded-xl px-4 py-2 shadow-lg active:scale-95 transition-all ${isAdded?"scale-95":""}`}>
+                        <button onClick={()=>handleAddClick(svc.id,item.name,svc.gradient)} className={`bg-gradient-to-r ${svc.gradient} text-white text-xs font-bold rounded-xl px-4 py-2 shadow-lg active:scale-95 transition-all ${isAdded?"scale-95":""}`}>
                           + Добавить
                         </button>
                       ) : (
                         <div className="flex items-center gap-3">
                           <button onClick={()=>removeFromCart(svc.id,item.name)} className="w-8 h-8 rounded-xl glass flex items-center justify-center text-white font-bold active:scale-90 transition-transform">—</button>
                           <span className="text-white font-black text-sm w-4 text-center">{qty}</span>
-                          <button onClick={()=>addToCart(svc.id,item.name,item.price)} className={`w-8 h-8 rounded-xl bg-gradient-to-br ${svc.gradient} flex items-center justify-center text-white font-bold active:scale-90 transition-transform`}>+</button>
+                          <button onClick={()=>handleAddClick(svc.id,item.name,svc.gradient)} className={`w-8 h-8 rounded-xl bg-gradient-to-br ${svc.gradient} flex items-center justify-center text-white font-bold active:scale-90 transition-transform`}>+</button>
                         </div>
                       )}
                     </div>
@@ -311,6 +373,34 @@ function CatalogTab({services,expandedService,setExpandedService,addToCart,remov
         ))}
       </div>
       <div className="h-4" />
+
+      {/* Laundry picker modal */}
+      {laundryModal && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center" style={{background:"rgba(0,0,0,0.6)"}}>
+          <div className="w-full max-w-sm bg-[#1a1a2e] rounded-t-3xl p-5 animate-slide-up">
+            <div className="w-10 h-1 rounded-full bg-border mx-auto mb-4" />
+            <h3 className="text-white font-black text-lg mb-1">Выберите прачечную</h3>
+            <p className="text-muted-foreground text-xs mb-4">{laundryModal.itemName}</p>
+            <div className="space-y-2">
+              {LAUNDRIES.map(l=>{
+                const price = (l.prices as any)[laundryModal.svcId]?.[laundryModal.itemName];
+                return (
+                  <button key={l.id} onClick={()=>handleSelectLaundry(l)} className="w-full glass rounded-2xl px-4 py-3 flex items-center justify-between active:scale-98 transition-transform">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{l.emoji}</span>
+                      <span className="text-white font-bold text-sm">{l.name}</span>
+                    </div>
+                    <span className={`font-black text-sm bg-gradient-to-r ${laundryModal.gradient} bg-clip-text text-transparent`}>{price?.toLocaleString()} ₽</span>
+                  </button>
+                );
+              })}
+            </div>
+            <button onClick={()=>setLaundryModal(null)} className="w-full mt-4 glass rounded-2xl py-3 text-muted-foreground text-sm font-bold active:scale-98 transition-transform">
+              Отмена
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -358,14 +448,15 @@ function CartTab({cart,totalPrice,deliveryCost,checkoutStep,setCheckoutStep,remo
           <h2 className="text-xl font-black text-white mb-4">Ваш заказ</h2>
           <div className="space-y-3 mb-5">
             {cart.map((item:any)=>(
-              <div key={`${item.serviceId}-${item.itemName}`} className="glass rounded-2xl p-4 flex items-center justify-between">
+              <div key={`${item.serviceId}-${item.itemName}-${item.laundry}`} className="glass rounded-2xl p-4 flex items-center justify-between">
                 <div>
                   <div className="text-white text-sm font-bold">{item.itemName}</div>
+                  {item.laundry && <div className="text-violet-400 text-xs font-semibold">{item.laundry}</div>}
                   <div className="text-muted-foreground text-xs">{item.price.toLocaleString()} ₽ × {item.qty}</div>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-white font-black text-sm">{(item.price*item.qty).toLocaleString()} ₽</span>
-                  <button onClick={()=>removeFromCart(item.serviceId,item.itemName)} className="w-7 h-7 rounded-xl bg-red-500/20 flex items-center justify-center active:scale-90 transition-transform">
+                  <button onClick={()=>removeFromCart(item.serviceId,item.itemName,item.laundry)} className="w-7 h-7 rounded-xl bg-red-500/20 flex items-center justify-center active:scale-90 transition-transform">
                     <Icon name="X" size={14} className="text-red-400" />
                   </button>
                 </div>
