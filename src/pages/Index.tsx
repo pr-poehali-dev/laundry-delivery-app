@@ -250,7 +250,7 @@ function HomeTab({ setTab }: { setTab:(t:any)=>void }) {
         <img src="https://cdn.poehali.dev/projects/bf98e752-a3f3-498a-8b1c-b801034defad/files/90784008-b6c6-49ee-b33c-0eb73bb22e98.jpg" alt="Прачечная" className="w-full h-44 object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-violet-900/90 via-violet-800/60 to-transparent" />
         <div className="absolute inset-0 p-5 flex flex-col justify-end">
-          <span className="text-xs font-bold text-cyan-400 bg-cyan-400/20 rounded-full px-3 py-1 w-fit mb-2">🚀 Доставка от 2 часов</span>
+          <span className="text-xs font-bold text-cyan-400 bg-cyan-400/20 rounded-full px-3 py-1 w-fit mb-2">🚀 Доставка от 1–2 дней</span>
           <h2 className="text-white font-black text-xl leading-tight">Профессиональная<br/>химчистка</h2>
           <button onClick={()=>setTab("catalog")} className="mt-3 bg-brand-gradient text-white font-bold text-sm rounded-2xl px-5 py-2.5 w-fit shadow-lg shadow-violet-500/40 active:scale-95 transition-transform">
             Выбрать услугу →
@@ -260,7 +260,7 @@ function HomeTab({ setTab }: { setTab:(t:any)=>void }) {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-6 animate-fade-in stagger-2">
-        {[["⭐","4.9","Рейтинг"],["🧺","2000+","Заказов"],["⚡","2 ч","Доставка"]].map(([e,v,l])=>(
+        {[["⭐","4.9","Рейтинг"],["🧺","2000+","Заказов"],["⚡","1–2 дня","Доставка"]].map(([e,v,l])=>(
           <div key={l} className="glass rounded-2xl p-3 text-center">
             <div className="text-xl mb-1">{e}</div>
             <div className="font-black text-white text-sm">{v}</div>
@@ -283,14 +283,6 @@ function HomeTab({ setTab }: { setTab:(t:any)=>void }) {
             <div className="font-bold text-white text-sm leading-tight">{s.title}</div>
           </div>
         ))}
-      </div>
-
-      {/* Promo */}
-      <div className="bg-brand-gradient-2 rounded-3xl p-5 mb-4 animate-fade-in stagger-4 relative overflow-hidden">
-        <div className="absolute -right-6 -top-6 text-7xl opacity-20 animate-spin-slow">✨</div>
-        <p className="text-xs font-bold text-pink-200 mb-1">АКЦИЯ</p>
-        <h3 className="text-white font-black text-lg leading-tight">Первый заказ со скидкой <span className="text-yellow-300">20%</span></h3>
-        <p className="text-pink-200 text-xs mt-1">Промокод: <span className="font-bold text-white">CLEAN20</span></p>
       </div>
 
       {/* Delivery */}
